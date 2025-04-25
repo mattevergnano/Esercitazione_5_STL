@@ -11,6 +11,7 @@ int main(){
     PolygonalMesh mesh;
 
     ImportMesh(mesh);
+
     Gedim::UCDUtilities utilities;
     {
         vector<Gedim::UCDProperty<double>> cell0Ds_properties(1);

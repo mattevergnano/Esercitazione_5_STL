@@ -217,7 +217,7 @@ bool ImportPolygons(PolygonalMesh& mesh)
             const auto it = mesh.MarkerCell2Ds.find(marker);
             if(it == mesh.MarkerCell2Ds.end())
             {
-                mesh.MarkerCell1Ds.insert({marker, {id}});
+                mesh.MarkerCell2Ds.insert({marker, {id}});
             }
             else
             {
