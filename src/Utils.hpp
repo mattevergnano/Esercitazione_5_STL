@@ -10,4 +10,6 @@ namespace PolygonalLibrary{
     bool ImportEdges(PolygonalMesh& mesh);
     //importo poligoni
     bool ImportPolygons(PolygonalMesh& mesh);
+    //test del programma
+    int testProgram(PolygonalMesh& mesh);
 }

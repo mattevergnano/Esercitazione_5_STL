@@ -54,5 +54,6 @@ int main(){
                                  cell1Ds_properties);
     }
     
+    testProgram(mesh);
     return 0;
 }

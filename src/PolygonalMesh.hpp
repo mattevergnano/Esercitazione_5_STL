@@ -34,5 +34,10 @@ namespace PolygonalLibrary{
         map<unsigned int, list<unsigned int>> MarkerCell0Ds = {};
         map<unsigned int, list<unsigned int>> MarkerCell1Ds = {};
         map<unsigned int, list<unsigned int>> MarkerCell2Ds = {};
+
+        //non-zero marker
+        unsigned int NumMarkerCell0Ds = 0;
+        unsigned int NumMarkerCell1Ds = 0;
+        unsigned int NumMarkerCell2Ds = 0;
     };
 }

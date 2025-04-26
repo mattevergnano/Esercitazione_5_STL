@@ -2,8 +2,10 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "Eigen/Eigen"
 
 using namespace std;
+using namespace Eigen;
 namespace PolygonalLibrary
 {
 bool ImportMesh(PolygonalMesh& mesh){
@@ -74,14 +76,12 @@ bool ImportPoints(PolygonalMesh& mesh){
             {
                 it->second.push_back(id);
             }
+            mesh.NumMarkerCell0Ds += 1;
         };
 
     };
     return true;
 };
-
-
-
 
 bool ImportEdges(PolygonalMesh& mesh)
 {
@@ -141,10 +141,11 @@ bool ImportEdges(PolygonalMesh& mesh)
             {
                 it->second.push_back(id);
             }
+            mesh.NumMarkerCell1Ds += 1;
         }
     };
     return true;
-    };
+};
 
 bool ImportPolygons(PolygonalMesh& mesh)
 {
@@ -223,10 +224,86 @@ bool ImportPolygons(PolygonalMesh& mesh)
             {
                 it->second.push_back(id);
             }
+            mesh.NumMarkerCell2Ds += 1;
         }
     }
     
     return true;
 }
+int testProgram(PolygonalMesh& mesh)
+{
+    //marker, controllo le dimensioni e confronto con il numero di marker non 0
+    unsigned int num0 = 0;
+    for(const auto& it : mesh.MarkerCell0Ds){
+        for(const auto& it1 : it.second){
+            num0 += 1;
+        }
+    }
+    if(num0 != mesh.NumMarkerCell0Ds)
+        cout << "Errore nel caricamento dei marker" << endl;
+    
 
+    unsigned int num1 = 0;
+    for(const auto& it : mesh.MarkerCell1Ds){
+        for(const auto& it1 : it.second){
+            num1 += 1;
+        }
+    }
+    if(num1 != mesh.NumMarkerCell1Ds)
+        cout << "Errore nel caricamento dei marker" << endl;
+
+
+    unsigned int num2 = 0;
+    for(const auto& it : mesh.MarkerCell2Ds){
+        for(const auto& it1 : it.second){
+            num2 += 1;
+        }
+    }
+    if(num2 != mesh.NumMarkerCell2Ds)
+        cout << "Errore nel caricamento dei marker" << endl;
+    
+    
+    //edge
+    unsigned int extr1 = 0;
+    unsigned int extr2 = 0;
+    for(unsigned int id = 0; id<mesh.NumCell1Ds;id ++){
+        extr1 = mesh.Cell1DsExtrema(0,id); //id primo estremo
+        extr2 = mesh.Cell1DsExtrema(1,id); //id secondo estremo
+        double x1 = mesh.Cell0DsCoordinates(0,extr1);
+        double y1 = mesh.Cell0DsCoordinates(1,extr1);
+        double x2 = mesh.Cell0DsCoordinates(0,extr2);
+        double y2 = mesh.Cell0DsCoordinates(1,extr2);
+        double dist = sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+        if(dist < 1e-12){
+            cout << "Errore, segmento di lunghezza nulla!" << endl;
+            return 1;
+        };
+    };
+
+    //area
+    
+    // for(unsigned int i = 0; i < mesh.NumCell2Ds;i++){
+    //     double area = 0.0;
+    //     double xn = mesh.Cell0DsCoordinates(0,mesh.Cell2DsVertices[mesh.Cell2DsNumEdges[i]]);
+    //     double yn = mesh.Cell0DsCoordinates(1,mesh.Cell2DsVertices[mesh.Cell2DsNumEdges[i]]);
+    //     double x0 = mesh.Cell0DsCoordinates(0,mesh.Cell2DsVertices[0]);
+    //     double y0 = mesh.Cell0DsCoordinates(1,mesh.Cell2DsVertices[0]);
+    //     area += x0*yn + xn*y0;
+    //     double x1 = 0.0;
+    //     double y1 = 0.0;
+    //     double x2 = 0.0;
+    //     double y2 = 0.0;
+    //     for(unsigned int j = 0; j<mesh.Cell2DsNumEdges[i]-1;j++){
+    //         x1 = mesh.Cell0DsCoordinates(0,mesh.Cell2DsVertices[j]);
+    //         y1 = mesh.Cell0DsCoordinates(1,mesh.Cell2DsVertices[j]);
+    //         x2 = mesh.Cell0DsCoordinates(0,mesh.Cell2DsVertices[j+1]);
+    //         y2 = mesh.Cell0DsCoordinates(1,mesh.Cell2DsVertices[j+1]);
+            
+            
+    //     }
+    // }
+    
+    //image
+    return 0;
+}
 }
