@@ -282,28 +282,29 @@ int testProgram(PolygonalMesh& mesh)
 
     //area
     
-    // for(unsigned int i = 0; i < mesh.NumCell2Ds;i++){
-    //     double area = 0.0;
-    //     double xn = mesh.Cell0DsCoordinates(0,mesh.Cell2DsVertices[mesh.Cell2DsNumEdges[i]]);
-    //     double yn = mesh.Cell0DsCoordinates(1,mesh.Cell2DsVertices[mesh.Cell2DsNumEdges[i]]);
-    //     double x0 = mesh.Cell0DsCoordinates(0,mesh.Cell2DsVertices[0]);
-    //     double y0 = mesh.Cell0DsCoordinates(1,mesh.Cell2DsVertices[0]);
-    //     area += x0*yn + xn*y0;
-    //     double x1 = 0.0;
-    //     double y1 = 0.0;
-    //     double x2 = 0.0;
-    //     double y2 = 0.0;
-    //     for(unsigned int j = 0; j<mesh.Cell2DsNumEdges[i]-1;j++){
-    //         x1 = mesh.Cell0DsCoordinates(0,mesh.Cell2DsVertices[j]);
-    //         y1 = mesh.Cell0DsCoordinates(1,mesh.Cell2DsVertices[j]);
-    //         x2 = mesh.Cell0DsCoordinates(0,mesh.Cell2DsVertices[j+1]);
-    //         y2 = mesh.Cell0DsCoordinates(1,mesh.Cell2DsVertices[j+1]);
-            
-            
-    //     }
-    // }
-    
-    //image
+    for(unsigned int i = 0; i < mesh.NumCell2Ds;i++){
+        vector vertici = mesh.Cell2DsVertices[i];
+        unsigned int numVert = mesh.Cell2DsNumEdges[i];
+        double x0 = mesh.Cell0DsCoordinates(0,vertici[0]);
+        double y0 = mesh.Cell0DsCoordinates(1,vertici[0]);
+        double xn = mesh.Cell0DsCoordinates(0,vertici[numVert-1]);
+        double yn = mesh.Cell0DsCoordinates(1,vertici[numVert-1]);
+        double area = x0*yn - xn*y0;
+        for(unsigned int j = 0; j < vertici.size()-1;j++)
+        {
+            double x1 = mesh.Cell0DsCoordinates(0,vertici[j]);
+            double y1 = mesh.Cell0DsCoordinates(1,vertici[j]);
+            double x2 = mesh.Cell0DsCoordinates(0,vertici[j+1]);
+            double y2 = mesh.Cell0DsCoordinates(1,vertici[j+1]);
+            area += x1*y2 - x2*y1;
+        } ;
+        area = abs(area) * 0.5;
+        if(area < 1e-12){
+            cout << "Errore, poligono di area nulla!" << endl;
+            return 1;
+        };
+    }
+
     return 0;
 }
 }
